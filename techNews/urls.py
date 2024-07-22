@@ -21,4 +21,5 @@ from techNews import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('news/', views.newsList),
+    path('news/<int:id>', views.specificNews)
 ]
