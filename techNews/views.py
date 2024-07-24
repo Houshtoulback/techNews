@@ -8,10 +8,15 @@ from rest_framework import status
 @api_view(['GET', 'POST'])
 def newsList (request): 
     if request.method == 'GET':
-        news = News.objects.all()
-        serializer = NewsSerializer(news, many= True)
+        tag_names = request.GET.getlist('tags')
+        
+        if tag_names:
+            news = News.objects.filter(tags__tag_name__in=tag_names).distinct()
+        else:
+            news = News.objects.all()
+            
+        serializer = NewsSerializer(news, many=True)
         return JsonResponse(serializer.data, safe=False)
-    
     if request.method == 'POST':
         serializer = NewsSerializer(data=request.data)
         if serializer.is_valid():
